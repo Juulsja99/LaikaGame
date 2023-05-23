@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemyDamage : MonoBehaviour
 {
+    // dit script zorgt ervoor de de speler damage krijgt als deze tegen de enemy aanloopt.
 
     public int damage;
     public PlayerHealth playerhealth;
