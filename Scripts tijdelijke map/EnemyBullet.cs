@@ -8,8 +8,9 @@ public class EnemyBullet : MonoBehaviour
     private Rigidbody2D rb;
     public float force;
     private float timer;
+    public int damage;
     
-    // zet script op bullet sprite
+    // zet script op bullet sprite en geef damage int mee
 
     // Start is called before the first frame update
     void Start()
@@ -39,8 +40,10 @@ public class EnemyBullet : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            other.gameObject.GetComponent<PlayerHealth>().health -= 10;
+            Debug.Log("Hit");
+            other.gameObject.GetComponent<PlayerHealth>().TakeDamage(damage);
             Destroy(gameObject);
+           
            
         }
     }

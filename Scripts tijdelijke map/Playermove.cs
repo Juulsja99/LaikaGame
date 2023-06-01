@@ -4,29 +4,81 @@ using UnityEngine;
 
 public class Playermove : MonoBehaviour
 {
+    private float horizontal;
+    private float speed = 20f;
+    private float jumpingPower = 16f;
+    private bool isFacingRight = true;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public float KBforce;
+    public float KBcounter;
+    public float KBtotalTime;
+    public bool knockFromRight;
+
+
+
+    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private LayerMask groundLayer;
+
+
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.A))
+        horizontal = Input.GetAxisRaw("Horizontal");
+
+        if (Input.GetButtonDown("Jump") && IsGrounded())
         {
-            transform.position += new Vector3(-20, 0, 0) * Time.deltaTime;
+            rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
         }
 
-        if (Input.GetKey(KeyCode.D))
+        if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
         {
-            transform.position += new Vector3(20, 0, 0) * Time.deltaTime;
+            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.8f);
         }
 
-        if (Input.GetKey(KeyCode.W))
+        Flip();
+    }
+
+    private void FixedUpdate()
+    {
+ 
+       if(KBcounter <= 0)
+       {
+            rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+       }
+        else
         {
-            transform.position += new Vector3(0, 30, 0) * Time.deltaTime;
+            Debug.Log(KBforce + " " + knockFromRight);
+            if(knockFromRight == true) 
+            {
+                rb.velocity = new Vector2(-KBforce, KBforce);
+
+            }
+            if(knockFromRight == false) 
+            {
+                rb.velocity = new Vector2(KBforce, KBforce);
+            }
+
+            KBcounter -= Time.deltaTime;
+
+        }
+        
+    }
+
+    private bool IsGrounded()
+    {
+        return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+    }
+
+    private void Flip()
+    {
+        if (isFacingRight && horizontal < 0f || !isFacingRight && horizontal > 0f)
+        {
+            isFacingRight = !isFacingRight;
+            Vector3 localScale = transform.localScale;
+            localScale.x *= -1f;
+            transform.localScale = localScale;
         }
     }
 }

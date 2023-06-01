@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -24,8 +25,10 @@ public class PlayerHealth : MonoBehaviour
         health -= damage;
         if(health <= 1)
         {
-            Time.timeScale = 5f;
+           
+            Thread.Sleep(1000);
             SceneManager.LoadScene("Scene1");
+
 
         }
     }
