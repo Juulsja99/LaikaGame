@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour
 {
+
+
 
     // reguleert de health van de speler 
 
@@ -19,9 +22,11 @@ public class PlayerHealth : MonoBehaviour
     public void TakeDamage(int damage)
     {
         health -= damage;
-        if(health <= 0)
+        if(health <= 1)
         {
-            Destroy(gameObject);
+            Time.timeScale = 5f;
+            SceneManager.LoadScene("Scene1");
+
         }
     }
 }

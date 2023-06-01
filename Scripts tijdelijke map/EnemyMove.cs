@@ -26,6 +26,7 @@ public class EnemyMove : MonoBehaviour
 
         if (isChasing)
         {
+
             if(transform.position.x > playertransform.position.x)
             {
                 transform.localRotation = Quaternion.Euler(0, 180, 0);
