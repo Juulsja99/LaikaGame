@@ -14,12 +14,22 @@ public class Playermove : MonoBehaviour
     public float KBtotalTime;
     public bool knockFromRight;
 
+  
+    private bool top;
+
 
 
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
 
+
+
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
 
 
     // Update is called once per frame
@@ -29,16 +39,47 @@ public class Playermove : MonoBehaviour
 
         if (Input.GetButtonDown("Jump") && IsGrounded())
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
+            rb.velocity = Vector2.up * jumpingPower;
         }
 
         if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
         {
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.8f);
+            rb.velocity = Vector2.up * jumpingPower;
         }
 
         Flip();
+
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            rb.gravityScale *= -1;
+            Rotation();
+        }
+
+        Vector2 jumpDir = Vector2.up;
+        if (rb.gravityScale == -1)
+        {
+            jumpDir = -jumpDir;
+        }
     }
+
+
+    void Rotation()
+    {
+        if (top == false)
+        {
+            transform.eulerAngles = new Vector3(0, 0, 180);
+        }
+        else
+        {
+            transform.eulerAngles = Vector3.zero;
+        }
+
+        top = !top;
+    }
+
+
+
 
     private void FixedUpdate()
     {
