@@ -14,8 +14,9 @@ public class Playermove : MonoBehaviour
     public float KBtotalTime;
     public bool knockFromRight;
 
-  
+
     private bool top;
+    public float Jumpforce;
 
 
 
@@ -25,61 +26,48 @@ public class Playermove : MonoBehaviour
 
 
 
-
-    void Start()
-    {
-        rb = GetComponent<Rigidbody2D>();
-    }
-
-
     // Update is called once per frame
     void Update()
     {
         horizontal = Input.GetAxisRaw("Horizontal");
 
-        if (Input.GetButtonDown("Jump") && IsGrounded())
+
+        if(top == false) 
         {
-            rb.velocity = Vector2.up * jumpingPower;
+            if (Input.GetButtonDown("Jump") && IsGrounded())
+            {
+                rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
+            }
+
+            if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.8f);
+            }
+
         }
 
-        if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
-        {
-            rb.velocity = Vector2.up * jumpingPower;
-        }
 
         Flip();
-
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             rb.gravityScale *= -1;
             Rotation();
+
         }
 
-        Vector2 jumpDir = Vector2.up;
-        if (rb.gravityScale == -1)
+        if (top == true)
         {
-            jumpDir = -jumpDir;
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+
+                Debug.Log("Jump");
+                Debug.Log(gameObject.transform.position);
+                rb.AddForce(Vector2.up * Jumpforce);
+
+            }
         }
     }
-
-
-    void Rotation()
-    {
-        if (top == false)
-        {
-            transform.eulerAngles = new Vector3(0, 0, 180);
-        }
-        else
-        {
-            transform.eulerAngles = Vector3.zero;
-        }
-
-        top = !top;
-    }
-
-
-
 
     private void FixedUpdate()
     {
@@ -105,6 +93,20 @@ public class Playermove : MonoBehaviour
 
         }
         
+    }
+
+    void Rotation()
+    {
+        if (top == false)
+        {
+            transform.eulerAngles = new Vector3(0, 0, 180);
+        }
+        else
+        {
+            transform.eulerAngles = Vector3.zero;
+        }
+
+        top = !top;
     }
 
     private bool IsGrounded()
