@@ -9,6 +9,7 @@ public class Playermove : MonoBehaviour
     private float jumpingPower = 16f;
     private float jumpinpowerReverse = -16;
     private bool isFacingRight = true;
+    private bool GravityOn = false;
 
     public float KBforce;
     public float KBcounter;
@@ -17,6 +18,10 @@ public class Playermove : MonoBehaviour
 
 
     private bool top;
+
+    //Om gravity aan te zetten, maak 2 empty game objects met triggers
+    // Geef 1 de tag TriggerON en de ander TriggerOFF
+    //Plaats de TriggerOn op het punt waar je de gravity aan wilt en de TriggerOFF waar je de gravity uit wilt
     
 
 
@@ -63,11 +68,15 @@ public class Playermove : MonoBehaviour
 
         Flip();
 
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            rb.gravityScale *= -1;
-            Rotation();
+        
+       if(GravityOn == true)    
+       {
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+            {
+                rb.gravityScale *= -1;
+                Rotation();
 
+            }
         }
 
        
@@ -127,5 +136,22 @@ public class Playermove : MonoBehaviour
             localScale.x *= -1f;
             transform.localScale = localScale;
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "TriggerON")
+        {
+            Debug.Log("Trigger");
+            GravityOn = true;
+        }
+
+        if (other.gameObject.tag == "TriggerOFF")
+        {
+            Debug.Log("OFF");
+            GravityOn = false;
+        }
+
+
     }
 }
