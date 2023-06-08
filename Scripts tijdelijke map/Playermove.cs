@@ -5,8 +5,9 @@ using UnityEngine;
 public class Playermove : MonoBehaviour
 {
     private float horizontal;
-    private float speed = 20f;
+    private float speed = 9f;
     private float jumpingPower = 16f;
+    private float jumpinpowerReverse = -16;
     private bool isFacingRight = true;
 
     public float KBforce;
@@ -16,7 +17,7 @@ public class Playermove : MonoBehaviour
 
 
     private bool top;
-    public float Jumpforce;
+    
 
 
 
@@ -39,11 +40,24 @@ public class Playermove : MonoBehaviour
                 rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
             }
 
+
             if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
             {
                 rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.8f);
             }
+        }
 
+        if (top == true)
+        {
+            if (Input.GetButtonDown("Jump") && IsGrounded())
+            {
+                rb.velocity = new Vector2(rb.velocity.x, jumpinpowerReverse);
+            }
+
+            if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.8f);
+            }
         }
 
 
@@ -56,17 +70,7 @@ public class Playermove : MonoBehaviour
 
         }
 
-        if (top == true)
-        {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-
-                Debug.Log("Jump");
-                Debug.Log(gameObject.transform.position);
-                rb.AddForce(Vector2.up * Jumpforce);
-
-            }
-        }
+       
     }
 
     private void FixedUpdate()
@@ -109,7 +113,7 @@ public class Playermove : MonoBehaviour
         top = !top;
     }
 
-    private bool IsGrounded()
+    public bool IsGrounded()
     {
         return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
     }
