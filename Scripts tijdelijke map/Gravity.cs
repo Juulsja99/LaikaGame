@@ -6,6 +6,7 @@ public class Gravity : MonoBehaviour
 {
     private Rigidbody2D rb;
     private bool top;
+    public float Jumpforce;
 
     // Start is called before the first frame update
     void Start()
@@ -20,7 +21,23 @@ public class Gravity : MonoBehaviour
         {
             rb.gravityScale *= -1;
             Rotation();
+            
+            
+
         }
+
+        if (top == true)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+
+                Debug.Log("Jump");
+                Debug.Log(gameObject.transform.position);
+                rb.AddForce(Vector2.up * Jumpforce);
+
+            }
+        }
+
     }
 
     void Rotation()
@@ -36,4 +53,6 @@ public class Gravity : MonoBehaviour
 
         top = !top;
     }
+
+    
 }

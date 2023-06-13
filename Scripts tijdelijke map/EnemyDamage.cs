@@ -23,15 +23,7 @@ public class EnemyDamage : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             Debug.Log("Hit");
-            playermovement.KBcounter = playermovement.KBtotalTime;
-            if(collision.transform.position.x <= transform.position.x)
-            {
-                playermovement.knockFromRight = true;
-            }
-            if (collision.transform.position.x > transform.position.x)
-            {
-                playermovement.knockFromRight = false;
-            }
+  
             playerhealth.TakeDamage(damage);
         }
     }
