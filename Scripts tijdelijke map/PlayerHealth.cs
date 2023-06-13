@@ -18,6 +18,7 @@ public class PlayerHealth : MonoBehaviour
 
     //spawn
     private Vector3 SpawnIn;
+    private Vector3 Respawn;
 
 
 
@@ -25,7 +26,7 @@ public class PlayerHealth : MonoBehaviour
     void Start()
     {
         health= maxHealth;
-        SpawnIn = transform.position;
+        Respawn = transform.position;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -40,10 +41,12 @@ public class PlayerHealth : MonoBehaviour
     public void TakeDamage(int damage)
     {
         health -= damage;
+        Thread.Sleep(1000);
+        transform.position = SpawnIn;
         if(health <= 1)
         {
 
-            transform.position = SpawnIn;
+            transform.position = Respawn;
         }
     }
 }
