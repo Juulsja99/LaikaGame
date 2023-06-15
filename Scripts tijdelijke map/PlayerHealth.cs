@@ -1,14 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+
+
 
 public class PlayerHealth : MonoBehaviour
 {
-
-
-
     // reguleert de health van de speler en Spawning
 
 
@@ -18,16 +17,35 @@ public class PlayerHealth : MonoBehaviour
 
     //spawn
     private Vector3 SpawnIn;
-    private Vector3 Respawn;
+    
 
+    //Healthbar
+    public Image[] hearts;
+    public Sprite FullHeart;
+    public Sprite Skull;
 
 
 
     void Start()
     {
         health= maxHealth;
-        Respawn = transform.position;
+        
     }
+
+    private void Update()
+    {
+        foreach(Image img in hearts) 
+        {
+            img.sprite = Skull;
+        }
+        for (int i = 0; i < health; i++)
+        {
+            hearts[i].sprite = FullHeart;
+        }
+        
+       
+    }
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -43,10 +61,12 @@ public class PlayerHealth : MonoBehaviour
         health -= damage;
         Thread.Sleep(1000);
         transform.position = SpawnIn;
-        if(health <= 1)
+        if(health <= 0)
         {
+            Thread.Sleep(1000);
+            SceneManager.LoadScene("Scene1");
 
-            transform.position = Respawn;
+            
         }
     }
 }
