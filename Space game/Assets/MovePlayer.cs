@@ -55,8 +55,8 @@ public class MovePlayer : MonoBehaviour
     {
         horizontal = Input.GetAxisRaw("Horizontal");
         animator.SetFloat("Speed", Mathf.Abs(horizontal));
-        
-        
+
+
 
         if (IsGrounded())
         {
@@ -78,7 +78,7 @@ public class MovePlayer : MonoBehaviour
             jumpBufferCounter -= Time.deltaTime;
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetButtonDown("Fire1"))
         {
             jumpBufferCounterGravity = jumpBufferTime;
         }
@@ -95,7 +95,7 @@ public class MovePlayer : MonoBehaviour
 
                 jumpBufferCounter = 0f;
 
-                
+
 
                 CreateDust();
             }
@@ -105,7 +105,7 @@ public class MovePlayer : MonoBehaviour
             {
                 rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.8f);
 
-                
+
 
                 coyoteTimeCounter = 0f;
             }
@@ -119,7 +119,7 @@ public class MovePlayer : MonoBehaviour
 
                 jumpBufferCounter = 0f;
 
-                
+
 
                 CreateDust();
             }
@@ -128,7 +128,7 @@ public class MovePlayer : MonoBehaviour
             {
                 rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.8f);
 
-                
+
 
                 coyoteTimeCounter = 0f;
             }
@@ -145,7 +145,7 @@ public class MovePlayer : MonoBehaviour
                 rb.gravityScale *= -1;
                 Rotation();
 
-               
+
 
                 jumpBufferCounterGravity = 0f;
             }
@@ -202,7 +202,7 @@ public class MovePlayer : MonoBehaviour
     public bool IsGrounded()
     {
         return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
-        
+
     }
 
     private void Flip()
