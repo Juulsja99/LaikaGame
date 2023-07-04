@@ -1,12 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class MovePlayer : MonoBehaviour
 {
     public CharacterController2D controller;
-
     public ParticleSystem dust;
     public Animator animator;
 
@@ -36,6 +34,8 @@ public class MovePlayer : MonoBehaviour
     // Geef 1 de tag TriggerON en de ander TriggerOFF
     //Plaats de TriggerOn op het punt waar je de gravity aan wilt en de TriggerOFF waar je de gravity uit wilt
 
+    public AudioSource jump;
+    public AudioSource gravFlip;
 
 
 
@@ -43,11 +43,12 @@ public class MovePlayer : MonoBehaviour
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
 
-
-    [Header("Events")]
-    [Space]
-
-    public UnityEvent OnLandEvent;
+    private void Start()
+    {
+        AudioSource[] audioSources = GetComponents<AudioSource>();
+        jump = audioSources[0];
+        gravFlip = audioSources[1];
+    }
 
 
     // Update is called once per frame
@@ -55,8 +56,6 @@ public class MovePlayer : MonoBehaviour
     {
         horizontal = Input.GetAxisRaw("Horizontal");
         animator.SetFloat("Speed", Mathf.Abs(horizontal));
-        
-        
 
         if (IsGrounded())
         {
@@ -69,16 +68,15 @@ public class MovePlayer : MonoBehaviour
 
         if (Input.GetButtonDown("Jump"))
         {
-            animator.SetBool("IsJumping", true);
             jumpBufferCounter = jumpBufferTime;
-
+            animator.SetBool("IsJumping", true);
         }
         else
         {
             jumpBufferCounter -= Time.deltaTime;
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetButtonDown("Fire1"))
         {
             jumpBufferCounterGravity = jumpBufferTime;
         }
@@ -95,17 +93,15 @@ public class MovePlayer : MonoBehaviour
 
                 jumpBufferCounter = 0f;
 
-                
-
                 CreateDust();
+
             }
 
 
             if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
             {
                 rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.8f);
-
-                
+                jump.Play();
 
                 coyoteTimeCounter = 0f;
             }
@@ -119,16 +115,14 @@ public class MovePlayer : MonoBehaviour
 
                 jumpBufferCounter = 0f;
 
-                
-
                 CreateDust();
+
             }
 
             if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
             {
                 rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.8f);
-
-                
+                jump.Play();
 
                 coyoteTimeCounter = 0f;
             }
@@ -144,8 +138,7 @@ public class MovePlayer : MonoBehaviour
             {
                 rb.gravityScale *= -1;
                 Rotation();
-
-               
+                gravFlip.Play();
 
                 jumpBufferCounterGravity = 0f;
             }
@@ -202,7 +195,6 @@ public class MovePlayer : MonoBehaviour
     public bool IsGrounded()
     {
         return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
-        
     }
 
     private void Flip()
